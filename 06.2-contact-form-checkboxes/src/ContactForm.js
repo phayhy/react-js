@@ -6,24 +6,42 @@ export default class ContactForm extends React.Component {
     lastName: "",
     enquiries: "",
     heardFrom: "",
-    contacts: "",
+    contacts: [],
     btnStatus: true, //disabled is true by default
   };
 
   updateFormField = (e) => {
-    //function to read in all form names and values
-    this.setState({
-      [e.target.name]: [e.target.value],
-    });
-    console.log(e.target.name);
+    let currentValues = this.state[e.target.name];
+    let modifiedValues;
+
+    //check array
+    if (Array.isArray(currentValues) === true) {
+      //if-else for array objects
+      if (!currentValues.includes(e.target.value)) {
+        modifiedValues = [...currentValues, e.target.value];
+      } else {
+        modifiedValues = currentValues.filter((element) => {
+          return element !== e.target.value;
+        });
+      }
+      this.setState({
+        [e.target.name]: modifiedValues,
+      });
+    } else {
+      //read in non-array objects from form: names and values
+      this.setState({
+        [e.target.name]: e.target.value,
+      });
+      //console.log(e.target.name);
+    }
 
     //check all fields have been filled
     if (
       this.state.firstName !== "" &&
-      this.state.lastName  !== "" &&
+      this.state.lastName !== "" &&
       this.state.enquiries !== "" &&
       this.state.heardFrom !== "" &&
-      this.state.contacts !== ""
+      this.state.contacts !== []
     ) {
       this.setState({ btnStatus: false }); //disable function deactivated if all fields are filled
     }
@@ -97,7 +115,7 @@ export default class ContactForm extends React.Component {
             name="contacts"
             type="checkbox"
             value="email"
-            //checked={this.state.contacts === "email"}
+            checked={this.state.contacts.includes("email")}
             onChange={this.updateFormField}
           />
           Email
@@ -105,7 +123,7 @@ export default class ContactForm extends React.Component {
             name="contacts"
             type="checkbox"
             value="phone"
-            //checked={this.state.contacts === "phone"}
+            checked={this.state.contacts.includes("phone")}
             onChange={this.updateFormField}
           />
           Phone
@@ -113,7 +131,7 @@ export default class ContactForm extends React.Component {
             name="contacts"
             type="checkbox"
             value="slowMail"
-            //checked={this.state.contacts === "slowMail"}
+            checked={this.state.contacts.includes("slowMail")}
             onChange={this.updateFormField}
           />
           Slow mail
