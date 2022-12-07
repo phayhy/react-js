@@ -47,6 +47,18 @@ export default class ContactForm extends React.Component {
     }
   };
 
+  submitForm = () => {
+    alert("submitted");
+    this.setState({
+      firstName: "",
+      lastName: "",
+      enquiries: "",
+      heardFrom: "",
+      contacts: [],
+      btnStatus: true
+    }); //reset details and submit button
+  };
+  
   render() {
     return (
       <React.Fragment>
