@@ -40,8 +40,10 @@ export default class Menu extends React.Component {
 
     for (let items of this.state.foodItems) {
       if (
-        this.state.searchFoodName === "" ||
-        items.name.toLowerCase().includes(this.state.searchFoodName.toLowerCase())
+        (this.state.searchFoodName === "" ||
+          items.name.toLowerCase().includes(this.state.searchFoodName.toLowerCase())) &&
+        (this.state.searchIngredient === "" ||
+          items.ingredients.toString().toLowerCase().includes(this.state.searchIngredient.toLowerCase()))
       ) {
         jsx.push(
           <div>

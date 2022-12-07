@@ -44,6 +44,23 @@ state = {
   ],
 };
 
+for (let items of state.foodItems) {
+  if (items.ingredients.toString().toLowerCase()
+  .includes(state.searchFoodName.toLowerCase())){
+    console.log(items.ingredients)
+  }
+}
+/*
+for (let items of state.foodItems) {
+    if (
+      state.searchIngredient === "" ||
+      items.name.toString().toLowerCase().includes(state.searchFoodName.toLowerCase())
+    ) {
+      console.log(items.ingredients);    
+      }
+  }
+*/
+/*
 let result = [];
 for (let items of state.foodItems) {
   if (
@@ -70,3 +87,5 @@ for (let i = 0; i < items.ingredients.length; i++) {
         return true;
     }
 }
+
+*/
