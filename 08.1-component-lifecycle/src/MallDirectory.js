@@ -1,44 +1,24 @@
 import React from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default class MallDirectory extends React.Component {
   state = {
     searchTerms: "",
-    events: [
-      "10% off at Coffee beans",
-      "Carolling at Don Don Donki",
-      "Free parking vouchers for spending above $100.00"
-    ],
-    shops: [
-      {
-        id: 1,
-        name: "Macdonalds",
-        floor: 1,
-        unit: 202,
-        type: "F&B"
-      },
-      {
-        id: 2,
-        name: "Coffee Beans",
-        floor: 2,
-        unit: 301,
-        type: "F&B"
-      },
-      {
-        id: 3,
-        name: "Uniqo",
-        floor: 1,
-        unit: 101,
-        type: "F&B"
-      },
-      {
-        id: 4,
-        name: "Don Don Donki",
-        floor: 5,
-        unit: 103,
-        type: "Supermarket"
-      }
-    ]
+    events: [],
+    shops: [],
   };
+
+  async componentDidMount() {
+    const eventResponse = await axios.get("events.json");
+    const eventData = eventResponse.data;
+    const shopResponse = await axios.get("shops.json");
+    const shopData = shopResponse.data;
+    this.setState({
+      events: eventData,
+      shops: shopData,
+    });
+  }
 
   renderShops() {
     let jsx = [];
@@ -74,7 +54,7 @@ export default class MallDirectory extends React.Component {
           placeholder="Enter search terms here"
           onChange={(e) => {
             this.setState({
-              searchTerms: e.target.value
+              searchTerms: e.target.value,
             });
           }}
         />
@@ -82,14 +62,14 @@ export default class MallDirectory extends React.Component {
         <h2>Shops</h2>
         {this.renderShops()}
         <h2>Events</h2>
-        {this.state.events.map(function(e) {
+        {this.state.events.map(function (e) {
           return (
             <div
               key={e}
               style={{
                 border: "1px solid black",
                 margin: "5px",
-                padding: "5px"
+                padding: "5px",
               }}
             >
               {e}
