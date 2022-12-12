@@ -21,7 +21,103 @@ export default class App extends React.Component {
       }
     ],
     newUserName: "",
-    newUserEmail: ""
+    newUserEmail: "",
+    beingUpdated: false,  //status of user being updated
+    updatedUserId: null,
+    updatedUserName: "",
+    updatedUserEmail: ""
+  };
+
+  updateFormField = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+
+  addUser = (e) => {
+    let newUser = {
+      _id: Math.floor(Math.random() * 10000),
+      name: this.state.newUserName,
+      email: this.state.newUserEmail
+    }
+    let currentValues = this.state.users;
+    let modifiedValues = [...currentValues, newUser];
+    this.setState({
+      users: modifiedValues,
+      newUserName: "",  //reset values to default
+      newUserEmail: ""
+    })
+    console.log(`New user added: ${this.state.newUserName}`);
+  };
+
+  displayEdit = (user) => {
+    if (this.state.beingUpdated === true && user._id === this.state.updatedUserId) {
+      return (
+        <div>
+          <hr />
+          <input
+            type="text"
+            value={this.state.updatedUserName}
+            onChange={this.updateFormField}
+            name="updatedUserName"
+          />
+          <input
+            type="text"
+            value={this.state.updatedUserEmail}
+            onChange={this.updateFormField}
+            name="updatedUserEmail"
+          />
+          <button
+            onClick={() => {
+              this.processEdit(user);
+            }}
+          >
+            Edit
+          </button>
+        </div>
+      );
+    } else {
+      return null
+    }
+  }
+
+
+  processEdit = (user) => {
+    let selectedUser = {
+      _id: this.state.updatedUserId,
+      name: this.state.updatedUserName,
+      email: this.state.updatedUserEmail
+    }
+
+    let user_index = this.state.users.findIndex(e => e === user);
+    let modifiedUsers = [
+      ...this.state.users.slice(0, user_index),
+      selectedUser,
+      ...this.state.users.slice(user_index + 1)
+    ];
+
+    this.setState({
+      users: modifiedUsers,
+      beingUpdated: false,  //updated ended, reset back to default
+      updatedUserId: null,
+      updatedUserName: "",
+      updatedUserEmail: ""
+    });
+    //console.log(modifiedUsers);
+    console.log(this.state);
+  }
+
+  deleteUser = (user) => {
+    let user_index = this.state.users.findIndex(e => e === user);
+    let modifiedUsers = [
+      ...this.state.users.slice(0, user_index),
+      ...this.state.users.slice(user_index + 1)
+    ];
+
+    this.setState({
+      users: modifiedUsers
+    });
+
   };
 
   renderAddUser() {
@@ -41,10 +137,11 @@ export default class App extends React.Component {
           onChange={this.updateFormField}
           name="newUserEmail"
         />
-        <button click={this.addUser}>Add</button>
+        <button onClick={this.addUser}>Add</button>
       </React.Fragment>
     );
   }
+
 
   render() {
     return (
@@ -52,12 +149,18 @@ export default class App extends React.Component {
         {this.state.users.map((user) => {
           return (
             <React.Fragment key={user._id}>
-              <div class="box">
+              <div className="box">
                 <h3>{user.name}</h3>
                 <h4>{user.email}</h4>
                 <button
-                  onClick={() => {
-                    this.beginEdit(user);
+                  onClick={async () => {
+                    await this.setState({
+                      beingUpdated: true, //change from false to true
+                      updatedUserId: user._id,
+                      updatedUserName: user.name,
+                      updatedUserEmail: user.email
+                    })
+                    console.log(this.state)
                   }}
                 >
                   Update
@@ -69,18 +172,16 @@ export default class App extends React.Component {
                 >
                   Delete
                 </button>
+                {this.displayEdit(user)}
               </div>
             </React.Fragment>
           );
-        })}
+        })
+        }
         {this.renderAddUser()}
-      </div>
+      </div >
     );
   }
 
-  addUser = () => {};
 
-  beginEdit = (user) => {};
-
-  deleteUser = (user) => {};
 }
