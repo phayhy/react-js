@@ -1,31 +1,44 @@
 [
-    {
-      "_id": 101,
-       "name": "Chicken Udon Soup",
-       "price": 11.99,
-       "ingredients": ["chicken stock", "udon", "chicken breast"],
-       "image":"./images/chicken-udon-soup.jpg"
-     },
-     {
-       "_id": 203,
-       "name": "Salmon Teriyaki Don",
-       "price": 9.9,
-       "ingredients": ["salmon", "rice", "soya sauce"],
-       "image":"./images/salmon-terriyaki-don.jpg"
-     },
-     {
-       "_id": 401,
-       "name": "Raw Salmon Slices",
-       "price": 15.99,
-       "ingredients": ["salmon"],
-       "image":"./images/raw-salmon-slices.jpg"
-     },
-     {
-       "_id": 402,
-       "name": "Chicken Miso Ramen",
-       "price": 15.99,
-       "ingredients": ["chicken", "miso", "ramen"],
-       "image":"./images/chicken-miso-ramen.jpg"
-     }
- ]
- 
+  {
+    "_id": 101,
+    "name": "Chicken Udon Soup",
+    "price": 11.99,
+    "ingredients": [
+      "chicken stock",
+      "udon",
+      "chicken breast"
+    ],
+    "image": "./images/chicken-udon-soup.jpg"
+  },
+  {
+    "_id": 203,
+    "name": "Salmon Teriyaki Don",
+    "price": 9.9,
+    "ingredients": [
+      "salmon",
+      "rice",
+      "soya sauce"
+    ],
+    "image": "./images/salmon-terriyaki-don.jpg"
+  },
+  {
+    "_id": 401,
+    "name": "Raw Salmon Slices",
+    "price": 15.99,
+    "ingredients": [
+      "salmon"
+    ],
+    "image": "./images/raw-salmon-slices.jpg"
+  },
+  {
+    "_id": 402,
+    "name": "Chicken Miso Ramen",
+    "price": 15.99,
+    "ingredients": [
+      "chicken",
+      "miso",
+      "ramen"
+    ],
+    "image": "./images/chicken-miso-ramen.jpg"
+  }
+]
