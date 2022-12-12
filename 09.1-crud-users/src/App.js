@@ -1,25 +1,86 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  state = {
+    users: [
+      {
+        _id: Math.floor(Math.random() * 10000),
+        name: "Jon Snow",
+        email: "jonsnow@winterfell.com"
+      },
+      {
+        _id: Math.floor(Math.random() * 10000),
+        name: "Ned Stark",
+        email: "nedstark@winterfell.com"
+      },
+      {
+        _id: Math.floor(Math.random() * 10000),
+        name: "Frodo Baggins",
+        email: "frodo@bagend.com"
+      }
+    ],
+    newUserName: "",
+    newUserEmail: ""
+  };
+
+  renderAddUser() {
+    return (
+      <React.Fragment>
+        <input
+          type="text"
+          placeholder="User name"
+          value={this.state.newUserName}
+          onChange={this.updateFormField}
+          name="newUserName"
+        />
+        <input
+          type="text"
+          placeholder="User email"
+          value={this.state.newUserEmail}
+          onChange={this.updateFormField}
+          name="newUserEmail"
+        />
+        <button click={this.addUser}>Add</button>
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    return (
+      <div className="App">
+        {this.state.users.map((user) => {
+          return (
+            <React.Fragment key={user._id}>
+              <div class="box">
+                <h3>{user.name}</h3>
+                <h4>{user.email}</h4>
+                <button
+                  onClick={() => {
+                    this.beginEdit(user);
+                  }}
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => {
+                    this.deleteUser(user);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </React.Fragment>
+          );
+        })}
+        {this.renderAddUser()}
+      </div>
+    );
+  }
+
+  addUser = () => {};
+
+  beginEdit = (user) => {};
+
+  deleteUser = (user) => {};
 }
-
-export default App;
