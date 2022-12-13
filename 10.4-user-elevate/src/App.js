@@ -1,6 +1,9 @@
 import React from "react";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css"
+import AddUser from "./components/AddUser";
+//import User from "./components/User";
+import UserList from "./components/UserList";
+import EditUser from "./components/EditUser";
 
 export default class App extends React.Component {
   state = {
@@ -8,119 +11,71 @@ export default class App extends React.Component {
       {
         _id: Math.floor(Math.random() * 10000),
         name: "Jon Snow",
-        email: "jonsnow@winterfell.com"
+        email: "jonsnow@winterfell.com",
       },
       {
         _id: Math.floor(Math.random() * 10000),
         name: "Ned Stark",
-        email: "nedstark@winterfell.com"
+        email: "nedstark@winterfell.com",
       },
       {
         _id: Math.floor(Math.random() * 10000),
         name: "Frodo Baggins",
-        email: "frodo@bagend.com"
-      }
+        email: "frodo@bagend.com",
+      },
     ],
     newUserName: "",
     newUserEmail: "",
     userBeingEdited: 0,
     editedUserName: "",
-    editedUserEmail: ""
+    editedUserEmail: "",
   };
-
-  renderAddUser() {
-    return (
-      <React.Fragment>
-        <input
-          type="text"
-          placeholder="User name"
-          value={this.state.newUserName}
-          onChange={this.updateFormField}
-          name="newUserName"
-        />
-        <input
-          type="text"
-          placeholder="User email"
-          value={this.state.newUserEmail}
-          onChange={this.updateFormField}
-          name="newUserEmail"
-        />
-        <button onClick={this.addUser}>Add</button>
-      </React.Fragment>
-    );
-  }
 
   updateFormField = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
   render() {
     return (
       <div className="App">
-        {this.state.users.map((user) => {
-          return (
-            <React.Fragment>
-              <div class="box">
-                {user._id === this.state.userBeingEdited ? (
-                  <div>
-                    <input
-                      type="text"
-                      name="editedUserName"
-                      onChange={this.updateFormField}
-                      value={this.state.editedUserName}
-                    />
-                  </div>
-                ) : (
-                  <h3>{user.name}</h3>
-                )}
-                {user._id === this.state.userBeingEdited ? (
-                  <div>
-                    <input
-                      type="text"
-                      name="editedUserEmail"
-                      onChange={this.updateFormField}
-                      value={this.state.editedUserEmail}
-                    />
-                  </div>
-                ) : (
-                  <h4>{user.email}</h4>
-                )}
-                {user._id === this.state.userBeingEdited ? (
-                  <div>
-                    <button
-                      onClick={() => {
-                        this.confirmEdit(user);
-                      }}
-                    >
-                      Confirm
-                    </button>
-                    <button onClick={this.cancelEdit}>Cancel edit</button>
-                  </div>
-                ) : (
-                  <div>
-                    <button
-                      onClick={() => {
-                        this.beginEdit(user);
-                      }}
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => {
-                        this.deleteUser(user);
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-              </div>
-            </React.Fragment>
-          );
+        {this.state.users.map((eachUser) => {
+          if (
+            this.state.userBeingEdited === eachUser._id 
+          ) {
+            return (
+              <EditUser
+                key={eachUser._id}
+                editedUserName={this.state.editedUserName}
+                editedUserEmail={this.state.editedUserEmail}
+                updateFormField={this.updateFormField}
+                confirmEdit={this.confirmEdit}
+                cancelEdit={this.cancelEdit}
+                user={eachUser}
+              />
+              
+            );
+          } else {
+            return (
+              <UserList
+                key={eachUser._id}
+                name={eachUser.name}
+                email={eachUser.email}
+                beginEdit={this.beginEdit}
+                deleteUser={this.deleteUser}
+                user={eachUser}
+              />
+            );
+          }
         })}
-        {this.renderAddUser()}
+        <AddUser
+          newUserName={this.state.newUserName}
+          newUserEmail={this.state.newUserEmail}
+          updateFormField={this.updateFormField}
+          addUser={this.addUser}
+        />
+        
       </div>
     );
   }
@@ -148,9 +103,11 @@ export default class App extends React.Component {
         {
           _id: Math.floor(Math.random() * 10000),
           name: this.state.newUserName,
-          email: this.state.newUserEmail
-        }
-      ]
+          email: this.state.newUserEmail,
+        },
+      ],
+      newUserName:"", //reset to default after new user name & email added to users above
+      newUserEmail:""
     });
   };
 
@@ -158,7 +115,7 @@ export default class App extends React.Component {
     this.setState({
       userBeingEdited: user._id,
       editedUserEmail: user.email,
-      editedUserName: user.name
+      editedUserName: user.name,
     });
   };
 
@@ -179,13 +136,16 @@ export default class App extends React.Component {
 
     let index = this.state.users.findIndex((u) => u._id === user._id);
     this.setState({
-      users: [...this.state.slice(0, index), ...this.state.slice(index + 1)]
+      users: [
+        ...this.state.users.slice(0, index),
+        ...this.state.users.slice(index + 1),
+      ],
     });
   };
 
   cancelEdit = () => {
     this.setState({
-      userBeingEdited: 0
+      userBeingEdited: 0,
     });
   };
 
@@ -219,11 +179,23 @@ export default class App extends React.Component {
         {
           ...user,
           email: this.state.editedUserEmail,
-          name: this.state.editedUserName
+          name: this.state.editedUserName,
         },
-        ...this.state.users.slice(index + 1)
+        ...this.state.users.slice(index + 1),
       ],
-      userBeingEdited: 0
+      userBeingEdited: 0,
     });
   };
 }
+
+
+/*
+<User
+                key={eachUser._id}
+                name={eachUser.name}
+                email={eachUser.email}
+                beginEdit={this.beginEdit}
+                deleteUser={this.deleteUser}
+                user={eachUser}
+              />
+*/
