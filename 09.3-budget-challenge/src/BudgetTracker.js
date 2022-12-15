@@ -67,6 +67,8 @@ export default class BudgetTracker extends React.Component {
   renderAddExpense() {
     return (
       <React.Fragment>
+        <hr />
+        <h3>Add new expense</h3>
         <input
           type="text"
           placeholder="Expense name"
