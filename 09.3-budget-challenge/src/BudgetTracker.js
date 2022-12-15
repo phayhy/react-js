@@ -1,4 +1,8 @@
 import React from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Card from "react-bootstrap/Card";
+import Button from 'react-bootstrap/Button';
+//npm install react-bootstrap bootstrap
 
 export default class BudgetTracker extends React.Component {
   state = {
@@ -71,19 +75,41 @@ export default class BudgetTracker extends React.Component {
         <h3>Add new expense</h3>
         <input
           type="text"
-          placeholder="Expense name"
+          placeholder="Expense Date Incurred"
+          value={this.state.newDateIncur}
+          onChange={this.updateFormField}
+          name="newDateIncur"
+        />
+        <input
+          type="text"
+          placeholder="Expense Description"
           value={this.state.newDescription}
           onChange={this.updateFormField}
           name="newDescription"
         />
+        <br />
         <input
           type="text"
-          placeholder="Expense amount"
+          placeholder="Expense Category"
+          value={this.state.newCategory}
+          onChange={this.updateFormField}
+          name="newCategory"
+        />
+        <input
+          type="text"
+          placeholder="Expense Amount"
           value={this.state.newAmount}
           onChange={this.updateFormField}
           name="newAmount"
         />
-        <button onClick={this.addExpense}>Add</button>
+        <input
+          type="checkbox"
+          value={this.state.newReconciled}
+          name="Expense reconcile"
+        />
+        Expense Reconciled?
+        <br />
+        <Button onClick={this.addExpense}>Add</Button>
       </React.Fragment>
     );
   }
@@ -91,31 +117,47 @@ export default class BudgetTracker extends React.Component {
   // the function below display the shop expense normally
   displayExpenseInfo(expense) {
     return (
-      <div className="expense-info">
-        <h2>{expense.description}</h2>
-        <h3>${expense.amount}</h3>
-        <button
-          onClick={async () => {
-            await this.setState({
-              expenseBeingModified: true, //change to true
-              updatedId: expense._id,
-              updatedDescription: expense.description,
-              updatedAmount: expense.amount,
-            });
-            console.log(this.state);
-          }}
-        >
-          Edit
-        </button>
-        <button
-          onClick={() => {
-            this.deleteExpense(expense);
-          }}
-        >
-          Delete
-        </button>
-        {this.displayEditExpense(expense)}
-      </div>
+      <Card style={{ width: "18rem" }} className="mb-2">
+        <Card.Body>
+          <div className="expense-info">
+            <ul>
+            <li>{expense.dateIncur}</li>
+            <li>{expense.description}</li>
+            <li>{expense.category}</li>
+            <li>${expense.amount}</li>
+            Expense Reconciled?
+            <input
+              type="checkbox"
+              value={expense.reconciled}
+              name="Expense reconcile"
+              checked={expense.reconciled}
+            />
+            </ul>
+            <br />
+            <Button
+              onClick={async () => {
+                await this.setState({
+                  expenseBeingModified: true, //change to true
+                  updatedId: expense._id,
+                  updatedDescription: expense.description,
+                  updatedAmount: expense.amount,
+                });
+                console.log(this.state);
+              }}
+            >
+              Edit
+            </Button>
+            <Button variant="danger"
+              onClick={() => {
+                this.deleteExpense(expense);
+              }}
+            >
+              Delete
+            </Button>
+            {this.displayEditExpense(expense)}
+          </div>
+        </Card.Body>
+      </Card>
     );
   }
 
@@ -140,13 +182,13 @@ export default class BudgetTracker extends React.Component {
             onChange={this.updateFormField}
             name="updatedAmount"
           />
-          <button
+          <Button
             onClick={() => {
               this.processEdit(expense);
             }}
           >
             Submit
-          </button>
+          </Button>
         </div>
       );
     } else {
