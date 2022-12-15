@@ -52,14 +52,6 @@ export default class BudgetTracker extends React.Component {
     });
   };
 
-  changeBoolean = (e) => {
-    let changeBoolean = !this.state.updatedReconciled;
-
-    this.setState({
-      updatedReconciled: changeBoolean 
-    });
-  };
-
   addExpense = (e) => {
     let newExpense = {
       _id: Math.floor(Math.random() * 10000),
@@ -158,7 +150,7 @@ export default class BudgetTracker extends React.Component {
                   updatedDescription: expense.description,
                   updatedCategory: expense.category,
                   updatedAmount: expense.amount,
-                  updatedReconciled: expense.reconciled 
+                  updatedReconciled: expense.reconciled //how to change boolean
                 });
                 console.log(this.state);
               }}
@@ -219,8 +211,8 @@ export default class BudgetTracker extends React.Component {
             type="checkbox"
             value={this.state.updatedReconciled}
             name="updatedReconciled"
-            onClick={this.changeBoolean} 
-            checked={this.state.updatedReconciled} 
+            onClick={this.updateFormField} //to edit this
+            checked={this.state.updatedReconciled} //toedit this
           />
           <Button
             variant="secondary"
