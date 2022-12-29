@@ -52,11 +52,17 @@ export default class BudgetTracker extends React.Component {
     });
   };
 
-  changeBoolean = (e) => {
+  updateBoolean = (e) => {
+    this.setState({
+      newReconciled: e.target.checked,
+    });
+  };
+
+  changeBoolean = () => {
     let changeBoolean = !this.state.updatedReconciled;
 
     this.setState({
-      updatedReconciled: changeBoolean 
+      updatedReconciled: changeBoolean,
     });
   };
 
@@ -73,12 +79,14 @@ export default class BudgetTracker extends React.Component {
     let modifiedValues = [...currentValues, newExpense];
     this.setState({
       expenses: modifiedValues,
+      //reset initial values
       newDateIncur: "",
       newDescription: "",
       newCategory: "",
-      newAmount: null,
+      newAmount: "",
       newReconciled: null,
     });
+    this.resetValues();
     console.log(`New user added: ${this.state.newDescription}`);
   };
 
@@ -87,43 +95,58 @@ export default class BudgetTracker extends React.Component {
       <React.Fragment>
         <hr />
         <h3>Add new expense</h3>
-        <input
-          type="text"
-          placeholder="Expense Date Incurred"
-          value={this.state.newDateIncur}
-          onChange={this.updateFormField}
-          name="newDateIncur"
-        />
-        <input
-          type="text"
-          placeholder="Expense Description"
-          value={this.state.newDescription}
-          onChange={this.updateFormField}
-          name="newDescription"
-        />
-        <br />
-        <input
-          type="text"
-          placeholder="Expense Category"
-          value={this.state.newCategory}
-          onChange={this.updateFormField}
-          name="newCategory"
-        />
-        <input
-          type="text"
-          placeholder="Expense Amount"
-          value={this.state.newAmount}
-          onChange={this.updateFormField}
-          name="newAmount"
-        />
-        <input
-          type="checkbox"
-          value={this.state.newReconciled}
-          onClick={this.updateFormField}
-          name="Expense reconcile"
-        />
-        Expense Reconciled?
-        <br />
+        <ul>
+          <li>
+            <b>Date incurred: &nbsp;</b>
+            <input
+              type="text"
+              placeholder="e.g., 9 August 2022"
+              value={this.state.newDateIncur}
+              onChange={this.updateFormField}
+              name="newDateIncur"
+            />
+          </li>
+          <li>
+            <b>Description: &nbsp;</b>
+            <input
+              type="text"
+              placeholder="e.g., buffet, tickets"
+              value={this.state.newDescription}
+              onChange={this.updateFormField}
+              name="newDescription"
+            />
+          </li>
+          <li>
+            <b>Category: &nbsp;</b>
+            <input
+              type="text"
+              placeholder="e.g., food, travel, others"
+              value={this.state.newCategory}
+              onChange={this.updateFormField}
+              name="newCategory"
+            />
+          </li>
+          <li>
+            <b>Amount: &nbsp;</b>
+            <input
+              type="text"
+              placeholder="e.g., 100"
+              value={this.state.newAmount}
+              onChange={this.updateFormField}
+              name="newAmount"
+            />
+          </li>
+          <li>
+            <b>Expense Reconciled? &nbsp;</b>
+            <input
+              type="checkbox"
+              value={this.state.newReconciled}
+              checked={this.state.newReconciled}
+              onClick={this.updateBoolean}
+              name="Expense reconcile"
+            />
+          </li>
+        </ul>
         <Button onClick={this.addExpense}>Add</Button>
       </React.Fragment>
     );
@@ -132,21 +155,31 @@ export default class BudgetTracker extends React.Component {
   // the function below display the shop expense normally
   displayExpenseInfo(expense) {
     return (
-      <Card style={{ width: "18rem" }} className="mb-2">
+      <Card style={{ width: "24rem" }} className="mb-2">
         <Card.Body>
           <div className="expense-info">
             <ul>
-              <li>Date incurred: {expense.dateIncur}</li>
-              <li>Description: {expense.description}</li>
-              <li>Category: {expense.category}</li>
-              <li>Amount: ${expense.amount}</li>
-              Expense Reconciled? &nbsp;
-              <input
-                type="checkbox"
-                value={expense.reconciled}
-                name="Expense reconcile"
-                checked={expense.reconciled}
-              />
+              <li>
+                <b>Date incurred:</b> {expense.dateIncur}
+              </li>
+              <li>
+                <b>Description:</b> {expense.description}
+              </li>
+              <li>
+                <b>Category:</b> {expense.category}
+              </li>
+              <li>
+                <b>Amount:</b> ${expense.amount}
+              </li>
+              <li>
+                <b>Expense Reconciled? &nbsp;</b>
+                <input
+                  type="checkbox"
+                  value={expense.reconciled}
+                  name="Expense reconcile"
+                  checked={expense.reconciled}
+                />
+              </li>
             </ul>
             <Button
               variant="success"
@@ -158,7 +191,7 @@ export default class BudgetTracker extends React.Component {
                   updatedDescription: expense.description,
                   updatedCategory: expense.category,
                   updatedAmount: expense.amount,
-                  updatedReconciled: expense.reconciled 
+                  updatedReconciled: expense.reconciled,
                 });
                 console.log(this.state);
               }}
@@ -189,39 +222,54 @@ export default class BudgetTracker extends React.Component {
       return (
         <div>
           <hr />
-          <input
-            type="text"
-            value={this.state.updatedDateIncur}
-            onChange={this.updateFormField}
-            name="updatedDateIncur"
-          />
-          <input
-            type="text"
-            value={this.state.updatedDescription}
-            onChange={this.updateFormField}
-            name="updatedDescription"
-          />
-          <input
-            type="text"
-            value={this.state.updatedCategory}
-            onChange={this.updateFormField}
-            name="updatedCategory"
-          />
-          <input
-            type="text"
-            value={this.state.updatedAmount}
-            onChange={this.updateFormField}
-            name="updatedAmount"
-          />
-          <br />
-          Expense Reconciled? &nbsp;
-          <input
-            type="checkbox"
-            value={this.state.updatedReconciled}
-            name="updatedReconciled"
-            onClick={this.changeBoolean} 
-            checked={this.state.updatedReconciled} 
-          />
+          <ul>
+            <li>
+              <b>Date incurred: &nbsp;</b>
+              <input
+                type="text"
+                value={this.state.updatedDateIncur}
+                onChange={this.updateFormField}
+                name="updatedDateIncur"
+              />
+            </li>
+            <li>
+              <b>Description: &nbsp;</b>
+              <input
+                type="text"
+                value={this.state.updatedDescription}
+                onChange={this.updateFormField}
+                name="updatedDescription"
+              />
+            </li>
+            <li>
+              <b>Category: &nbsp;</b>
+              <input
+                type="text"
+                value={this.state.updatedCategory}
+                onChange={this.updateFormField}
+                name="updatedCategory"
+              />
+            </li>
+            <li>
+              <b>Amount: &nbsp;</b>
+              <input
+                type="text"
+                value={this.state.updatedAmount}
+                onChange={this.updateFormField}
+                name="updatedAmount"
+              />
+            </li>
+            <li>
+              <b>Expense Reconciled? &nbsp;</b>
+              <input
+                type="checkbox"
+                value={this.state.updatedReconciled}
+                name="updatedReconciled"
+                onClick={this.changeBoolean}
+                checked={this.state.updatedReconciled}
+              />
+            </li>
+          </ul>
           <Button
             variant="secondary"
             onClick={() => {
